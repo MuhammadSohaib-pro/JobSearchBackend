@@ -11,12 +11,10 @@ module.exports = {
       const path =
         req.file != undefined ? req.file.path.replace(/\\/g, "/") : "";
       if (!title || !path) {
-        return res
-          .status(400)
-          .json({
-            status: false,
-            message: "Please fill the all the required fields",
-          });
+        return res.status(400).json({
+          status: false,
+          message: "Please fill all the required fields",
+        });
       }
       const newCategory = new Category({ title: title, image: path });
       try {

@@ -7,7 +7,7 @@ module.exports = {
     if (!title || !description || !category || !salary) {
       res
         .status(400)
-        .json({ status: true, message: "you have a missing field" });
+        .json({ status: false, message: "you have a missing field" });
     }
 
     try {
@@ -15,7 +15,7 @@ module.exports = {
       await newVacancy.save();
       res
         .status(201)
-        .json({ status: true, message: "vacancy created successfully" });
+        .json({ status: true, message: "Vacancy created successfully" });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
     }
@@ -26,12 +26,12 @@ module.exports = {
     if (!query) {
       res
         .status(400)
-        .json({ status: true, message: "query parameter is required" });
+        .json({ status: true, message: "Query parameter is required" });
     }
 
     try {
-      const results = await vacancyModel.find({ $text: { $search: query } });
-      res.json(results);
+      const vacancies = await vacancyModel.find({ $text: { $search: query } });
+      res.json({ status: true, vacancies: vacancies });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
     }
@@ -45,7 +45,7 @@ module.exports = {
           select: "name address logo phoneNumber email",
         })
         .populate({ path: "category", select: "image title" });
-      res.status(200).json(vacancies);
+      res.status(200).json({ status: true, vacancies: vacancies });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
     }
@@ -60,7 +60,7 @@ module.exports = {
           select: "name address logo phoneNumber email",
         })
         .populate({ path: "category", select: "image title" });
-      res.status(200).json(vacancy);
+      res.status(200).json({ status: true, vacancy: vacancy });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
     }
@@ -75,7 +75,7 @@ module.exports = {
           select: "name address logo phoneNumber email",
         })
         .populate({ path: "category", select: "image title" });
-      res.status(200).json(vacancies);
+      res.status(200).json({ status: true, vacancies: vacancies });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
     }

@@ -40,8 +40,8 @@ module.exports = {
     const id = req.params.id;
 
     try {
-      const resumes = await Resume.find({ userId: id });
-      res.status(200).json(resumes);
+      const resume = await Resume.find({ userId: id });
+      res.status(200).json({ status: true, resume: resume });
     } catch (error) {
       res.status(500).json({ status: false, message: error.message });
     }

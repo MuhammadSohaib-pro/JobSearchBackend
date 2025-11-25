@@ -5,9 +5,10 @@ module.exports = {
     const { vacancyId, userId } = req.body;
 
     if (!vacancyId || !userId) {
-      return res
-        .status(400)
-        .json({ message: "Please provide both vacancyId and userId" });
+      return res.status(400).json({
+        status: false,
+        message: "Please provide both vacancyId and userId",
+      });
     }
 
     try {
@@ -16,14 +17,15 @@ module.exports = {
         vacancyId: req.body.vacancyId,
       });
       if (favouriteExist) {
-        return res
-          .status(400)
-          .json({ message: "Job already added to favourite" });
+        return res.status(400).json({
+          status: false,
+          message: "Vacancy is already in favourites",
+        });
       }
       await favourite.save();
       res.status(201).json({ status: true, message: "added to favourites" });
     } catch (error) {
-      return res.status(500).json({ message: "Internal Server Error" });
+      return res.status(500).json({ status: false, message: error.message });
     }
   },
   getFavourites: async (req, res) => {
@@ -34,19 +36,21 @@ module.exports = {
         select:
           "title description requirements skillTags experience salary benefits",
       });
-      res.status(200).json(favourite);
+      res.status(200).json({ status: true, favourite: favourite });
     } catch (error) {
-      return res.status(500).json({ message: "Internal Server Error" });
+      return res.status(500).json({ status: false, message: error.message });
     }
   },
   deleteFavourite: async (req, res) => {
     const id = req.params.id;
 
     try {
-      const favourite = await Favourite.findByIdAndDelete(id);
-      res.status(200).json({ message: "removed from favourites" });
+      await Favourite.findByIdAndDelete(id);
+      res
+        .status(200)
+        .json({ status: true, message: "Vacancy removed from favourites" });
     } catch (error) {
-      return res.status(500).json({ message: "Internal Server Error" });
+      return res.status(500).json({ status: false, message: error.message });
     }
   },
 };
