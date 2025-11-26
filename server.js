@@ -9,6 +9,7 @@ const vacancyRoute = require("./routes/vacancyRoute");
 const favouriteRoute = require("./routes/favouriteRoute");
 const resumeRoute = require("./routes/resumeRoute");
 const applicationRoute = require("./routes/applicationRoute");
+const userRoute = require("./routes/userRoute");
 const mongoose = require("mongoose");
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use("/api/vacancies/", vacancyRoute);
 app.use("/api/favourites/", favouriteRoute);
 app.use("/api/resumes", resumeRoute);
 app.use("/api/applications", applicationRoute);
+app.use("/api/users", userRoute);
 
 //for accessing uploads directory in browser
 app.use("/uploads", express.static("uploads"));
