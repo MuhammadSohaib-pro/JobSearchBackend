@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
+const rateLimit = require("express-rate-limit");
 
 const userAuthRoute = require("./routes/userAuthRoute");
 const companyAuthRoute = require("./routes/companyAuthRoute");
@@ -10,11 +11,21 @@ const favouriteRoute = require("./routes/favouriteRoute");
 const resumeRoute = require("./routes/resumeRoute");
 const applicationRoute = require("./routes/applicationRoute");
 const userRoute = require("./routes/userRoute");
+const companyRoute = require("./routes/companyRoute");
 const mongoose = require("mongoose");
 dotenv.config();
 
 const PORT = process.env.PORT;
 const DB = process.env.DB;
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  ipv6Subnet: 56,
+  message: "Too many requests, please try again later",
+});
 
 mongoose
   .connect(DB)
@@ -27,6 +38,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+app.use(limiter);
 app.use("/api/", userAuthRoute);
 app.use("/api/", companyAuthRoute);
 app.use("/api/categories/", categoryRoute);
@@ -35,6 +47,7 @@ app.use("/api/favourites/", favouriteRoute);
 app.use("/api/resumes", resumeRoute);
 app.use("/api/applications", applicationRoute);
 app.use("/api/users", userRoute);
+app.use("/api/company", companyRoute);
 
 //for accessing uploads directory in browser
 app.use("/uploads", express.static("uploads"));

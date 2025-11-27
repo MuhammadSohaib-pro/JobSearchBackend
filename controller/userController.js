@@ -14,7 +14,7 @@ module.exports = {
       return res.status(500).json({ status: false, message: error.message });
     }
   },
-  updateUser: async (req, res) => {
+  updateUserById: async (req, res) => {
     const id = req.params.id;
     uploadProfile(req, res, async (err) => {
       if (err) {
@@ -79,7 +79,7 @@ module.exports = {
       await User.findByIdAndDelete(id);
       return res
         .status(200)
-        .json({ status: true, message: "user profile updated successfully" });
+        .json({ status: true, message: "user profile deleted successfully" });
     } catch (error) {
       return res.status(500).json({ status: false, message: error.message });
     }
